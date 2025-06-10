@@ -15,7 +15,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
     typeof window !== "undefined" ? window.innerWidth < 768 : false;
   const { refs: projectRefs, visibles } = useProjectRefsAndVisibles(
     projects.length,
-    isMobile
+    isMobil
   );
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   }, [visibles, onActiveProjectChange]);
 
   return (
-    <section className="flex flex-col items-center justify-center w-full bg-theme p-8 transition-opacity duration-1000 ease-in-out">
+    <section className="flex flex-col items-center justify-center w-full bg-theme p-0 overflow-hidden animate-fade-in transition-opacity ease-in duration-700">
       <h1
         className={`text-6xl z-40 mt-20 text-theme transition-opacity duration-700 ease-in`}
       >
