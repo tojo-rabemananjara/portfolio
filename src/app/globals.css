@@ -36,6 +36,7 @@ body {
   background-color: var(--theme-bg);
   color: var(--theme-text);
   font-family: var(--font-sans);
+  overflow-x: hidden;
 }
 
 /* --- Reusable Theme Utility Classes --- */
@@ -58,9 +59,16 @@ body {
   border-radius: 1.25rem;
   padding: 1.5rem;
   width: 100%;
-  max-width: 56rem;
+  max-width: 100%;
+  overflow: hidden;
   box-shadow: var(--theme-shadow);
   text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .card {
+    max-width: 56rem;
+  }
 }
 
 /* --- Buttons --- */

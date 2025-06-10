@@ -77,7 +77,7 @@ function ProjectCard({
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="w-full max-w-screen-lg flex flex-col md:flex-row items-center gap-10 card p-6 md:p-12 rounded-2xl">
+      <div className="w-full flex flex-col md:flex-row items-center gap-10 card max-w-screen-lg mx-auto p-6 md:p-12 rounded-2xl">
         {/* Left: Image or Video */}
         <div className="flex-1 flex justify-center">
           {project.video ? (
@@ -152,7 +152,7 @@ export function ProjectsSection() {
   const firstCardRef = React.useRef<HTMLDivElement>(null);
   const firstCardVisible = useIsVisible(firstCardRef);
   return (
-    <section className="flex flex-col items-center justify-center w-full bg-theme p-0 animate-fade-in transition-opacity ease-in duration-700">
+    <section className="flex flex-col items-center justify-center w-full bg-theme p-0 overflow-hidden animate-fade-in transition-opacity ease-in duration-700">
       <h1
         className={`text-6xl mt-20 text-theme transition-opacity duration-700 ease-in ${
           firstCardVisible ? "opacity-100" : "opacity-0"
