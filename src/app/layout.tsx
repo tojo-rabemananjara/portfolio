@@ -1,5 +1,4 @@
 import "./globals.css";
-import Navbar, { NavbarLink } from "./components/Navbar";
 
 export const metadata = {
   title: "Tojo Rabemananjara | Portfolio",
@@ -12,15 +11,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const navLinks: NavbarLink[] = [
-    { name: "About Me", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Reach Out", href: "#contact" },
-  ];
   return (
     <html lang="en">
       <body>
-        <Navbar navLinks={navLinks} resumeUrl="/resume.pdf" />
         <div>{children}</div>
       </body>
     </html>

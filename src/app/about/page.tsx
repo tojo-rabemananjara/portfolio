@@ -1,21 +1,8 @@
 "use client";
-import React, { useRef } from "react";
-import useInView from "./useInView";
-
 export function AboutSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { inView, outDirection } = useInView(sectionRef);
-  let animClass = "fade-slide";
-  if (inView) animClass += " in";
-  else if (outDirection === "up") animClass += " out-up";
-  else if (outDirection === "down") animClass += " out-down";
-
   return (
-    <div
-      ref={sectionRef}
-      className={`flex flex-col items-center justify-center w-full bg-theme p-8 animate-fade-in ${animClass}`}
-    >
-      <h1 className="text-6xl mb-3 text-theme">About Me</h1>
+    <section className="flex flex-col items-center justify-center w-full bg-theme p-8 transition-opacity duration-1000 ease-in-out">
+      <h1 className="text-6xl mb-3 text-theme">About</h1>
       <div className="flex flex-col md:flex-row gap-10 mb-8">
         <ul className="flex-1 space-y-3 text-lg text-theme">
           <li>
@@ -58,7 +45,7 @@ export function AboutSection() {
         experiences. When I&apos;m not coding, you&apos;ll find me exploring new
         tech, reading, or hiking.
       </p>
-    </div>
+    </section>
   );
 }
 
