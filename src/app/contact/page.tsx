@@ -1,15 +1,7 @@
 "use client";
-import React, { useRef } from "react";
-import useInView from "../about/useInView";
+import React from "react";
 
 export function ContactSection() {
-  const secRef = useRef<HTMLDivElement>(null);
-  const { inView, outDirection } = useInView(secRef);
-  let animClass = "fade-in-up";
-  if (inView) animClass += " visible";
-  else if (outDirection === "up") animClass = "fade-up-out";
-  else if (outDirection === "down") animClass = "fade-down-out";
-
   const [form, setForm] = React.useState({
     name: "",
     email: "",
@@ -50,8 +42,8 @@ export function ContactSection() {
   const smsHref = `sms:2406606468?body=${smsBody}`;
 
   return (
-    <section className="flex flex-col items-center justify-center w-full bg-theme p-8 animate-fade-in">
-      <div ref={secRef} className={`w-full max-w-screen-lg card ${animClass}`}>
+    <section className="flex flex-col items-center justify-center w-full bg-theme p-8 transition-opacity duration-1000 ease-in-out">
+      <div>
         <h1 className="text-6xl mb-8 text-theme">Reach Out</h1>
         <p className="mb-4 text-lg text-theme text-center">
           You can send me an <b>email</b> or, on mobile, a <b>text message</b>!

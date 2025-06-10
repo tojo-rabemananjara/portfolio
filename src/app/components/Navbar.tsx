@@ -1,13 +1,17 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Hamburger from "./Hamburger";
+import { FaChevronDown } from "react-icons/fa";
 
 export type NavbarLink = { name: string; href: string };
 
 interface NavbarProps {
   navLinks: NavbarLink[];
   resumeUrl?: string;
+  activeSection: string;
+  projectDropdown?: { title: string; id: string }[];
+  activeProjectId?: string;
 }
 
 interface NavLinksProps {
@@ -17,6 +21,8 @@ interface NavLinksProps {
   resumeClassName?: string;
   navLinks: NavbarLink[];
   resumeUrl?: string;
+  projectDropdown?: { title: string; id: string }[];
+  activeProjectId?: string;
 }
 
 function scrollToSection(id: string) {
@@ -28,33 +34,6 @@ function scrollToSection(id: string) {
   }
 }
 
-function useActiveSection(sectionIds: string[]) {
-  const [active, setActive] = useState(sectionIds[0]);
-  useEffect(() => {
-    const handleScroll = () => {
-      let found = sectionIds[0];
-      const threshold = 100; // px from top of viewport, adjust as needed
-      for (let i = 0; i < sectionIds.length; i++) {
-        const id = sectionIds[i];
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top - threshold <= 0) {
-            found = id;
-          } else {
-            break;
-          }
-        }
-      }
-      setActive(found);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [sectionIds]);
-  return active;
-}
-
 function NavLinks({
   activeSection,
   onLinkClick,
@@ -62,12 +41,86 @@ function NavLinks({
   resumeClassName = "",
   navLinks,
   resumeUrl = "/resume.pdf",
+  projectDropdown = [],
+  activeProjectId = "",
 }: NavLinksProps) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLLIElement>(null);
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [dropdownOpen]);
   return (
     <>
       {navLinks.map(({ name, href }) => {
         const sectionId = href.replace("#", "");
         const isActive = activeSection === sectionId;
+        if (name === "Projects" && projectDropdown.length > 0) {
+          return (
+            <li key={name} className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                className={`text-theme link transition-colors duration-200 ease-in-out flex items-center gap-1${
+                  isActive ? " link-active" : ""
+                } ${linkClassName}`}
+                aria-current={isActive ? "page" : undefined}
+                onClick={() => setDropdownOpen((v) => !v)}
+                onBlur={() => setDropdownOpen(false)}
+              >
+                {name}
+                <span
+                  className={`transition-transform mt-1 ${
+                    dropdownOpen ? "rotate-180" : "rotate-0"
+                  }`}
+                  style={{ fontSize: "0.8em" }}
+                >
+                  <FaChevronDown />
+                </span>
+              </button>
+              <AnimatePresence>
+                {dropdownOpen && (
+                  <motion.ul
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                    className="absolute left-0 mt-2 w-60 bg-theme shadow-xl rounded-xl z-50 py-3 text-theme"
+                    style={{ minWidth: 220 }}
+                  >
+                    {projectDropdown.map((proj) => (
+                      <li key={proj.id}>
+                        <button
+                          type="button"
+                          className={`block w-full text-left pl-4 py-2 font-medium hover:pl-5.5 transition-all duration-150 ${
+                            activeProjectId === proj.id
+                              ? " underline font-semi-bold link-active text-theme"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            scrollToSection(proj.id);
+                            setDropdownOpen(false);
+                            if (onLinkClick) onLinkClick();
+                          }}
+                        >
+                          {proj.title}
+                        </button>
+                      </li>
+                    ))}
+                  </motion.ul>
+                )}
+              </AnimatePresence>
+            </li>
+          );
+        }
         return (
           <li key={name}>
             <button
@@ -90,53 +143,36 @@ function NavLinks({
         <a
           href={resumeUrl}
           download
-          className={`btn-accent rounded font-semibold text-theme ${resumeClassName}`}
+          className={`btn-accent rounded font-semibold text-theme ${resumeClassName} whitespace-nowrap max-w-xs flex items-center justify-center text-center`}
           onClick={onLinkClick}
         >
-          Resume
+          My Resume
         </a>
       </li>
     </>
   );
 }
 
-export default function Navbar({ navLinks, resumeUrl }: NavbarProps) {
-  const sectionIds = navLinks.map((l) => l.href.replace("#", ""));
-  const activeSection = useActiveSection(sectionIds);
+export default function Navbar({
+  navLinks,
+  resumeUrl,
+  activeSection,
+  projectDropdown = [],
+  activeProjectId = "",
+}: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const isHomeActive = activeSection === "about" || activeSection === "home";
 
   return (
     <nav className="sticky top-0 z-50 border-b shadow-lg bg-theme">
       <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-4">
-          <button
-            type="button"
-            aria-label="Go to Home"
-            onClick={() => scrollToSection("home")}
-            className={`w-10 h-10 rounded-full flex items-center justify-center text-3xl font-bold transition-all duration-200
-              ${
-                isHomeActive
-                  ? "bg-theme text-theme border-2 border-theme ring-2 ring-primary"
-                  : "btn-primary"
-              }
-            `}
-            style={{ outline: "none" }}
-          >
+          <div className="w-10 h-10 rounded-full flex items-center justify-center text-3xl transition-all duration-200">
             T
-          </button>
+          </div>
           <button
             type="button"
             onClick={() => scrollToSection("home")}
-            className={`text-2xl tracking-tight drop-shadow transition-colors duration-200 ease-in-out text-theme link${
-              isHomeActive ? " link-active underline underline-offset-4" : ""
-            }`}
-            style={{
-              background: "none",
-              border: "none",
-              padding: 0,
-              cursor: "pointer",
-            }}
+            className="text-2xl tracking-tight drop-shadow transition-colors duration-200 ease-in-out text-theme"
           >
             Tojo Rabemananjara
           </button>
@@ -147,6 +183,8 @@ export default function Navbar({ navLinks, resumeUrl }: NavbarProps) {
             activeSection={activeSection}
             navLinks={navLinks}
             resumeUrl={resumeUrl}
+            projectDropdown={projectDropdown}
+            activeProjectId={activeProjectId}
           />
         </ul>
         {/* Hamburger for Mobile */}
@@ -177,6 +215,8 @@ export default function Navbar({ navLinks, resumeUrl }: NavbarProps) {
                     resumeUrl={resumeUrl}
                     onLinkClick={() => setMenuOpen(false)}
                     resumeClassName=""
+                    projectDropdown={projectDropdown}
+                    activeProjectId={activeProjectId}
                   />
                 </ul>
               </motion.div>

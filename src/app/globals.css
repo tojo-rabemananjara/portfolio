@@ -6,28 +6,54 @@
 
 /* --- Global Theme Variables --- */
 :root {
-  --theme-bg: #ffffff; /* bright background */
-  --theme-fg: #111111; /* strong foreground */
-  --theme-text: #111111; /* deeper black text for readability */
-  --theme-primary: #2b50d6; /* slightly deeper primary */
-  --theme-primary-hover: #1e3da6; /* darker hover */
-  --theme-accent: #fb8500; /* vibrant orange accent */
-  --theme-accent-hover: #e07b00; /* deeper orange on hover */
-  --theme-card-bg: #f1f1f1; /* more contrast from pure white */
-  --theme-shadow: 0 6px 32px rgba(0, 0, 0, 0.1);
+  /* Base Layer Colors */
+  --bg-page: #ffffff;
+  --bg-card: #f9fafb;
+  --bg-surface: #f3f4f6;
+
+  /* Text Colors */
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --text-on-accent: #ffffff;
+
+  /* Primary Colors */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+
+  /* Accent / Secondary Call to Action */
+  --color-accent: #f97316;
+  --color-accent-hover: #ea580c;
+
+  /* Borders and Shadow */
+  --border-color: #e5e7eb;
+  --shadow-elevation: 0 6px 24px rgba(0, 0, 0, 0.08);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --theme-bg: #0e0e0e; /* deeper black for background */
-    --theme-fg: #ffffff;
-    --theme-text: #ffffff; /* true white for high contrast */
-    --theme-primary: #6d9eff; /* vibrant blue */
-    --theme-primary-hover: #4a84ff;
-    --theme-accent: #fbbf24; /* golden tone for accent */
-    --theme-accent-hover: #f59e0b;
-    --theme-card-bg: #1a1a1a;
-    --theme-shadow: 0 6px 32px rgba(255, 255, 255, 0.07);
+    /* Base Layer Colors */
+    --bg-page: #0f172a;
+    --bg-card: #1e293b;
+    --bg-surface: #334155;
+
+    /* Text Colors */
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-on-accent: #0f172a;
+
+    /* Primary Colors */
+    --color-primary: #60a5fa;
+    --color-primary-hover: #3b82f6;
+
+    /* Accent */
+    --color-accent: #fbbf24;
+    --color-accent-hover: #f59e0b;
+
+    /* Borders and Shadow */
+    --border-color: #475569;
+    --shadow-elevation: 0 6px 24px rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -41,21 +67,25 @@ body {
 
 /* --- Reusable Theme Utility Classes --- */
 .bg-theme {
-  background-color: var(--theme-bg);
-  color: var(--theme-fg);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
 }
 
 .fg-theme {
-  background-color: var(--theme-fg);
-  color: var(--theme-bg);
+  background-color: var(--text-primary);
+  color: var(--bg-page);
 }
 
 .text-theme {
-  color: var(--theme-text);
+  color: var(--text-primary);
+}
+
+.text-muted {
+  color: var(--text-muted);
 }
 
 .card {
-  background-color: var(--theme-card-bg);
+  background-color: var(--bg-card);
   border-radius: 1.25rem;
   padding: 1.5rem;
   width: 100%;
@@ -73,40 +103,43 @@ body {
 
 /* --- Buttons --- */
 .btn-primary {
-  background-color: var(--theme-primary);
-  color: var(--theme-fg);
+  background-color: var(--color-primary);
+  color: var(--text-on-accent);
   transition: background 0.3s, color 0.3s;
-  padding: 7px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
 }
 .btn-primary:hover,
 .btn-primary:focus {
-  background-color: var(--theme-primary-hover);
-  color: var(--theme-bg);
+  background-color: var(--color-primary-hover);
+  color: var(--text-on-accent);
 }
 
 .btn-accent {
-  background-color: var(--theme-accent);
-  color: var(--theme-text);
+  background-color: var(--color-accent);
+  color: var(--text-on-accent);
   transition: background 0.3s, color 0.3s;
-  padding: 7px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
 }
 .btn-accent:hover,
 .btn-accent:focus {
-  background-color: var(--theme-accent-hover);
-  color: var(--theme-bg);
+  background-color: var(--color-accent-hover);
+  color: var(--text-on-accent);
 }
 
 /* --- Links --- */
 .link {
-  color: var(--theme-text);
-  background: var(--theme-bg);
-  transition: color 0.3s, background 0.3s;
-  padding: 7px;
-  border-radius: 4px;
+  color: var(--color-primary);
+  background: transparent;
+  transition: color 0.3s;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
 }
 .link:hover,
 .link:focus {
-  background: var(--theme-primary);
+  color: var(--color-primary-hover);
+  background: var(--bg-surface);
 }
 .link-active {
   font-weight: 600;
@@ -114,63 +147,16 @@ body {
   text-underline-offset: 0.23em;
 }
 
-/* --- Animation --- */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Lighter theme background for dropdowns, cards, etc. */
+.bg-theme-light {
+  background-color: var(--bg-surface);
 }
-.fade-in {
-  animation: fade-in 1s ease-out;
+/* Accent background for highlights, hovers, etc. */
+.bg-theme-accent {
+  background-color: var(--color-accent);
 }
 
-/* Fade-in-up animation for scroll-triggered elements */
-.fade-in-up {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.fade-in-up.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Fade-up-out: fade out and move up when leaving viewport upwards */
-.fade-up-out {
-  opacity: 0;
-  transform: translateY(-40px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Fade-down-out: fade out and move down when leaving viewport downwards */
-.fade-down-out {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Fade-slide animation for scroll-triggered elements */
-.fade-slide {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.fade-slide.in {
-  opacity: 1;
-  transform: translateY(0);
-}
-.fade-slide.out-up {
-  opacity: 0;
-  transform: translateY(-40px);
-}
-.fade-slide.out-down {
-  opacity: 0;
-  transform: translateY(40px);
+/* Subtle border using theme color */
+.border-theme {
+  border-color: var(--color-primary);
 }
